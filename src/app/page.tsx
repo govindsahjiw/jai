@@ -24,8 +24,8 @@ export default function Home() {
         <Header setSelectedItem={setSelectedItem} />
         <HeroSection isChatOpen={isChatOpen} setIsChatOpen={setIsChatOpen} slectedItem={slectedItem}/>
         <CustomAISlider isChatOpen={isChatOpen} setIsChatOpen={setIsChatOpen} slectedItem={slectedItem}/>
-        <UseCasesSection />
-        <HealthcareSection isChatOpen={isChatOpen} setIsChatOpen={setIsChatOpen} />
+        <UseCasesSection slectedItem={slectedItem}/>
+        <HealthcareSection isChatOpen={isChatOpen} setIsChatOpen={setIsChatOpen} slectedItem={slectedItem}/>
         <Footer />
       </div>
 
