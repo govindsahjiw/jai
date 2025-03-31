@@ -8,6 +8,7 @@ import Image from "next/image";
 import Avatar from "../../public/img/avatar.webp";
 import { useEffect, useState } from "react";
 import { useParamsContext } from "@/context/PageContext";
+import Link from 'next/link';
 
 interface Slide {
   image: string;
@@ -22,6 +23,8 @@ interface Benefit {
 }
 
 export default function HeroSection({ isChatOpen, setIsChatOpen }: any) {
+
+  const [isFreeTrialOpen, setIsFreeTrialOpen] = useState(false);
   const { selectedPage } = useParamsContext();
   const [rawData, setRawData] = useState<any>(null);
   const [heroData, setHeroData] = useState<{ slides: Slide[]; benefits: Benefit[] }>({
@@ -163,17 +166,106 @@ export default function HeroSection({ isChatOpen, setIsChatOpen }: any) {
       {/* Right CTA Buttons */}
       <div className="absolute right-4 top-4 z-20">
         <div className="flex flex-col gap-3 bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-lg border border-white">
-          <button
+          {/* <button
             className="text-white px-5 py-2 rounded-full font-medium text-sm transition-all shadow-sm whitespace-nowrap"
             style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}
           >
             Schedule 30 Min Call
-          </button>
-          <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-5 py-2 rounded-full font-medium text-sm transition-all whitespace-nowrap">
+          </button> */}
+          <Link 
+            href="http://workspace.google.com/resources/appointment-scheduling/" 
+            passHref
+            legacyBehavior
+          >
+            <a target="_blank" rel="noopener noreferrer">
+              <button
+                className="text-white px-5 py-2 rounded-full font-medium text-sm transition-all shadow-sm whitespace-nowrap"
+                style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}
+              >
+                Schedule 30 Min Call
+              </button>
+            </a>
+          </Link>
+
+          <button
+            onClick={() => setIsFreeTrialOpen(true)}
+            className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-5 py-2 rounded-full font-medium text-sm transition-all whitespace-nowrap"
+          >
             1 Week Free Trial
           </button>
         </div>
       </div>
+
+      {isFreeTrialOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop with blur effect */}
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setIsFreeTrialOpen(false)}
+          />
+
+          {/* Modal container */}
+          <div className="relative w-full max-w-md bg-white/90 backdrop-blur-md rounded-xl shadow-2xl border border-white/20 overflow-hidden">
+            {/* Close button */}
+            <button
+              onClick={() => setIsFreeTrialOpen(false)}
+              className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Modal content */}
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Start Your Free Trial</h2>
+              <p className="text-gray-600 mb-6">Get full access for 1 week with no commitment.</p>
+
+              <form className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="John Doe"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input
+                    type="email"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="your@email.com"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Your company (optional)"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-md"
+                >
+                  Start Free Trial
+                </button>
+
+                <p className="text-xs text-gray-500 text-center mt-4">
+                  By signing up, you agree to our Terms of Service and Privacy Policy.
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
