@@ -1,6 +1,5 @@
 ///page.tsx
 "use client";
-import dynamic from "next/dynamic"; 
 import { useState, useEffect } from "react";
 import HeroSection from "../components/HeroSection";
 import UseCasesSection from "../components/UseCasesSection";
