@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev": "env-cmd -f .env.dev next dev",
+    "build:dev": "env-cmd -f .env.dev next build",
+    "start": "env-cmd -f .env.dev next start",
+    "build": "next build && rm -rf ./node_modules/@next/swc-* && rm -rf ./.next/cache"
   },
   "dependencies": {
     "framer-motion": "^12.5.0",
