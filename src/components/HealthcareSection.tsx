@@ -1,11 +1,10 @@
-"use client";
 
-import React, { useState, useEffect } from "react";
+"use client";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
-import { useParamsContext } from "@/context/PageContext";
+import { useEffect, useState } from "react";
 
 interface CategoryData {
   image: string;
@@ -16,92 +15,107 @@ interface CategoryData {
 
 interface HealthcareSectionProps {
   isChatOpen: boolean;
-  setIsChatOpen: (isOpen: boolean) => void;
-  slectedItem: string;  // Add this line
+  setIsChatOpen: (isOpen: boolean, conversationType?: string) => void;
+  healthcareData?: any; // Allow raw data or transformed data
 }
 
-const HealthcareSection = ({ isChatOpen, setIsChatOpen }: HealthcareSectionProps) => {
-  const { selectedPage } = useParamsContext();
+export default function HealthcareSection({ 
+  isChatOpen, 
+  setIsChatOpen,
+  healthcareData 
+}: HealthcareSectionProps) {
   const [activeCategory, setActiveCategory] = useState<string>("");
-  const [categories, setCategories] = useState<string[]>([]);
-  const [data, setData] = useState<{
+  const [transformedData, setTransformedData] = useState<{
     header: string;
     subheader: string;
     categories: Record<string, CategoryData[]>;
   } | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [rawData, setRawData] = useState<any>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLjtrmWRrx3ddsR8ZpP7AStChhnRj6D3l5qbxzm5VrRmcmwacWQrV6KAssrggrVu69HX526HYD1kgGL6bxHtVYovIC5X8ezwToCLrb3UmlbswiL3yytiVay7bN6iX-U3MoIiDrAj25Eb4k4th6clMfo4D8zUXLxNrEpWQX01OlGQtWC3h9j1eojWECqLAq9dodaICrkppCJPzXFIYFaUYG7T2uO001JyPy2VXuiV5LkaWm6hgWK6WWsGVBJBtICLuufYYHMOs2GpaxKrPbIAdvSRBs70R9xwU0vFZAAo&lib=MlhqZVQ7trLZ4_nyPCS4HqCx8ZFlIpigL"
-        );
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        setRawData(result);
-        updateHealthcareData(result, selectedPage?.pageName || 'home');
-      } catch (err) {
-        console.error("Error fetching data:", err);
-        setError("Failed to load data. Please try again later.");
-      } finally {
-        setLoading(false);
+  // Transform applicationstype data into grouped categories
+  const transformHealthcareData = (data: any) => {
+    if (!data?.applicationstype) return null;
+    const categories: Record<string, CategoryData[]> = {};
+    data.applicationstype.forEach((item: any) => {
+      const category = item[2]; // Column 2 is the category (e.g., "LLMs")
+      if (!categories[category]) {
+        categories[category] = [];
       }
+      categories[category].push({
+        image: item[4], // Column 4 is the image
+        title: item[5], // Column 5 is the title
+        desc: item[6],  // Column 6 is the description
+        learnMore: item[7] // Column 7 is "Learn More"
+      });
+    });
+    return {
+      header: "AI Application Categories",
+      subheader: "Explore how our AI solutions can transform your business across various domains.",
+      categories
     };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (rawData) {
-      updateHealthcareData(rawData, selectedPage?.pageName || 'home');
-    }
-  }, [selectedPage, rawData]);
-
-  const updateHealthcareData = (data: any, pageName: string) => {
-    // Remove leading slash if exists
-    const cleanPageName = pageName.startsWith('/') ? pageName.substring(1) : pageName;
-    
-    // Get the healthcare data for the current page or fallback to home
-    const pageData = data[cleanPageName]?.applicationstype || data.home?.applicationstype;
-    
-    if (pageData) {
-      setData(pageData);
-      const categoryKeys = Object.keys(pageData.categories || {});
-      setCategories(categoryKeys);
-      setActiveCategory(categoryKeys[0] || "");
-    }
   };
 
-  if (loading) {
-    return <div className="max-w-6xl mx-auto p-6 text-center">Loading AI applications...</div>;
-  }
+  useEffect(() => {
+    if (healthcareData) {
+      // Check if healthcareData is already transformed or needs transformation
+      if (healthcareData.categories) {
+        setTransformedData(healthcareData);
+      } else {
+        const transformed = transformHealthcareData(healthcareData);
+        setTransformedData(transformed);
+      }
+    }
+  }, [healthcareData]);
 
-  if (error) {
-    return <div className="max-w-6xl mx-auto p-6 text-center text-red-500">{error}</div>;
-  }
+  useEffect(() => {
+    if (transformedData?.categories) {
+      const categories = Object.keys(transformedData.categories);
+      if (categories.length > 0) {
+        setActiveCategory(categories[0]);
+      }
+    }
+  }, [transformedData]);
 
-  if (!data) {
-    return <div className="max-w-6xl mx-auto p-6 text-center">No data available</div>;
-  }
+  if (!transformedData || !transformedData.categories) return null;
+
+  const categories = Object.keys(transformedData.categories);
+
+  // Mapping of titles to conversation types (snake_case)
+  const titleToConversationMap: Record<string, string> = {
+    "LLMs for Strategic Planning": "llms_for_strategic_planning",
+    "Market Research Enhancement": "market_research_enhancement",
+    "Content Generation": "content_generation",
+    "Business Growth Strategies": "business_growth_strategies",
+    "Competitive Analysis": "competitive_analysis",
+    "Financial Forecasting": "financial_forecasting",
+    "Risk Management": "risk_management",
+    "Key Performance Indicators": "key_performance_indicators",
+    "Employee Productivity Analysis": "employee_productivity_analysis",
+    "Process Automation": "process_automation",
+    "Customer Support Automation": "customer_support_automation",
+    "Patient Data Enrichment": "patient_data_enrichment",
+    "Medical Imaging Analysis": "medical_imaging_analysis",
+    "Predictive Analytics": "predictive_analytics",
+    "Fraud Detection": "fraud_detection",
+    "Data Cleansing": "data_cleansing",
+    "Data Integration": "data_integration",
+    "Predictive Marketing Campaigns": "predictive_marketing_campaigns",
+    "Customer Segmentation": "customer_segmentation",
+    "AI-Driven Cloud Optimization": "ai_driven_cloud_optimization",
+    "Cloud Security": "cloud_security",
+    "AI in Supply Chain": "ai_in_supply_chain",
+    "AI in Business Intelligence": "ai_in_business_intelligence",
+    "Inventory Management": "inventory_management",
+    "Logistics Optimization": "logistics_optimization"
+  };
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      {/* Heading */}
       <div className="text-center mb-16 pt-12">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          <span className="bg-gradient-to-r from-black to-blue-500 text-transparent bg-clip-text">
-            {data.header}
-          </span>
+          {transformedData.header}
         </h2>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          {data.subheader}
+          {transformedData.subheader}
         </p>
       </div>
       
@@ -134,22 +148,20 @@ const HealthcareSection = ({ isChatOpen, setIsChatOpen }: HealthcareSectionProps
             }}
             className="w-full"
           >
-            {data.categories[activeCategory]?.map((item, index) => (
+            {transformedData.categories[activeCategory]?.map((item, index) => (
               <SwiperSlide key={index} className="pb-4">
                 <div className="h-full p-4 bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow flex flex-col">
                   <img 
                     src={item.image} 
+                    alt={item.title}
                     className="w-full h-48 object-cover rounded-t-lg" 
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/img/placeholder.jpg';
-                    }}
                   />
                   <div className="p-4 flex-1 flex flex-col">
                     <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
                     <p className="text-sm text-gray-600 flex-1">{item.desc}</p>
                     <button
-                      onClick={() => setIsChatOpen(true)}
-                      className="mt-4 px-4 py-2 bg-gradient-to-br from-[rgba(0,97,209,0.82)] to-[rgba(49,84,118,0.78)] text-white rounded-lg hover:bg-blue-600 transition-all cursor-pointer"
+                      onClick={() => setIsChatOpen(true, titleToConversationMap[item.title] || "general")}
+                      className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
                     >
                       {item.learnMore}
                     </button>
@@ -162,6 +174,4 @@ const HealthcareSection = ({ isChatOpen, setIsChatOpen }: HealthcareSectionProps
       )}
     </div>
   );
-};
-
-export default HealthcareSection;
+}

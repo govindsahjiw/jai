@@ -1,14 +1,14 @@
-"use client";
 
+// herosection.tsx
+"use client";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import Image from "next/image";
 import Avatar from "../../public/img/avatar.webp";
-import { useEffect, useState } from "react";
-import { useParamsContext } from "@/context/PageContext";
 import Link from 'next/link';
+import { useState } from "react";
 
 interface Slide {
   image: string;
@@ -19,45 +19,52 @@ interface Slide {
 interface Benefit {
   title: string;
   description: string;
-  type?: string;
 }
 
-export default function HeroSection({ isChatOpen, setIsChatOpen }: any) {
+interface HeroSectionProps {
+  isChatOpen: boolean;
+  setIsChatOpen: (isOpen: boolean, chatType?: string) => void;
+  heroData?: {
+    slides: Slide[];
+    benefits: Benefit[];
+  };
+}
 
+export default function HeroSection({ 
+  isChatOpen, 
+  setIsChatOpen,
+  heroData 
+}: HeroSectionProps) {
   const [isFreeTrialOpen, setIsFreeTrialOpen] = useState(false);
-  const { selectedPage } = useParamsContext();
-  const [rawData, setRawData] = useState<any>(null);
-  const [heroData, setHeroData] = useState<{ slides: Slide[]; benefits: Benefit[] }>({
-    slides: [],
-    benefits: []
-  });
 
-  useEffect(() => {
-    fetch(
-      "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLjtrmWRrx3ddsR8ZpP7AStChhnRj6D3l5qbxzm5VrRmcmwacWQrV6KAssrggrVu69HX526HYD1kgGL6bxHtVYovIC5X8ezwToCLrb3UmlbswiL3yytiVay7bN6iX-U3MoIiDrAj25Eb4k4th6clMfo4D8zUXLxNrEpWQX01OlGQtWC3h9j1eojWECqLAq9dodaICrkppCJPzXFIYFaUYG7T2uO001JyPy2VXuiV5LkaWm6hgWK6WWsGVBJBtICLuufYYHMOs2GpaxKrPbIAdvSRBs70R9xwU0vFZAAo&lib=MlhqZVQ7trLZ4_nyPCS4HqCx8ZFlIpigL"
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setRawData(data);
-        // Get page name without slash
-        const pageKey = selectedPage?.pageName?.replace(/^\//, '') || "home";
-        if (data[pageKey] && data[pageKey].herosection) {
-          setHeroData(data[pageKey].herosection);
-        } else if (data.home && data.home.herosection) {
-          setHeroData(data.home.herosection);
-        }
-      });
-  }, []);
+  if (!heroData) return null;
 
-  useEffect(() => {
-    if (rawData) {
-      // Remove slash from page name if it exists
-      const pageKey = selectedPage?.pageName?.replace(/^\//, '') || "home";
-      if (rawData[pageKey] && rawData[pageKey].herosection) {
-        setHeroData(rawData[pageKey].herosection);
-      }
-    }
-  }, [selectedPage, rawData]);
+  // Map benefit titles to snake_case conversation types
+  const benefitToConversationMap: Record<string, string> = {
+    "Reduce development time by up to 40%": "reduce_development_time_by_up_to_40_percent",
+    "Improve software quality by 30–50%": "improve_software_quality_by_30_50_percent",
+    "Speed up delivery by 25%": "speed_up_delivery_by_25_percent",
+    "Reduce deployment pipeline effort by up to 60%": "reduce_development_pipeline_effort_by_up_to_60_percent",
+    "Component Library": "component_library", // Angular
+    "RxJS Optimization": "rxjs_optimization",
+    "Performance Tuning": "performance_tuning",
+    "NgRx State Management": "ngrx_state_management",
+    "Real-time APIs": "real_time_apis", // Node
+    "Microservices Architecture": "microservices_architecture",
+    "Database Optimization": "database_optimization",
+    "Serverless Node.js": "serverless_node_js",
+    "Component Library1": "component_library_react", // React (overwritten, but we'll handle this below)
+    "State Management": "state_management",
+    "Performance Optimization": "performance_optimization",
+    "Next.js Integration": "next_js_integration",
+    "AI Code Generation": "ai_code_generation", // AI Agent
+    "Automated Testing": "automated_testing",
+    "Predictive Analytics": "predictive_analytics",
+    "Natural Language Processing": "natural_language_processing",
+  };
+
+  // Handle duplicate "Component Library" by checking the page context if needed
+  // For simplicity, we'll assume the React version uses "component_library_react" explicitly in the data if differentiation is needed
 
   return (
     <div className="relative w-full h-[60vh] overflow-hidden bg-gray-50">
@@ -66,14 +73,8 @@ export default function HeroSection({ isChatOpen, setIsChatOpen }: any) {
         modules={[Autoplay, Pagination]}
         spaceBetween={0}
         slidesPerView={1}
-        pagination={{
-          clickable: true,
-        }}
-        autoplay={{
-          delay: 4000,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: false,
-        }}
+        pagination={{ clickable: true }}
+        autoplay={{ delay: 4000, disableOnInteraction: false, pauseOnMouseEnter: false }}
         loop
         speed={800}
         className="w-full h-full"
@@ -84,9 +85,8 @@ export default function HeroSection({ isChatOpen, setIsChatOpen }: any) {
               <Image
                 src={slide.image}
                 alt={`Slide ${index + 1}`}
-                layout="fill"
-                objectFit="cover"
-                quality={100}
+                fill
+                className="object-cover"
               />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-black">
                 <h1 className="text-xl md:text-3xl font-bold mb-4 animate-slide-up p-2 border-2 border-transparent border-gradient rounded-lg">
@@ -115,9 +115,7 @@ export default function HeroSection({ isChatOpen, setIsChatOpen }: any) {
 
         <div
           className="relative rounded-xl p-5 shadow-xl"
-          style={{
-            background: "linear-gradient(to right, #0061d1d1, #315476c7)"
-          }}
+          style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}
         >
           <button
             onClick={() => setIsChatOpen(true, "talk_to_hype")}
@@ -127,16 +125,12 @@ export default function HeroSection({ isChatOpen, setIsChatOpen }: any) {
             <span className="text-lg">🎙</span>
           </button>
 
-          {/* Sound waves */}
           <div className="absolute -bottom-1 left-0 right-0 h-4 flex justify-center gap-1">
             {[3, 5, 7, 5, 3].map((height, i) => (
               <div
                 key={i}
                 className="w-1 bg-white/80 rounded-full animate-wave"
-                style={{
-                  height: `${height}px`,
-                  animationDelay: `${i * 150}ms`
-                }}
+                style={{ height: `${height}px`, animationDelay: `${i * 150}ms` }}
               />
             ))}
           </div>
@@ -149,7 +143,7 @@ export default function HeroSection({ isChatOpen, setIsChatOpen }: any) {
           {heroData.benefits.map((benefit, index) => (
             <div
               key={index}
-              onClick={() => setIsChatOpen(true, benefit.type)}
+              onClick={() => setIsChatOpen(true, benefitToConversationMap[benefit.title] || 'general')}
               className="cursor-pointer bg-white/90 backdrop-blur-sm p-4 rounded-xl border border-white shadow-sm hover:shadow-md transition-all hover:-translate-y-1"
             >
               <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 leading-tight">
@@ -166,17 +160,7 @@ export default function HeroSection({ isChatOpen, setIsChatOpen }: any) {
       {/* Right CTA Buttons */}
       <div className="absolute right-4 top-4 z-20">
         <div className="flex flex-col gap-3 bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-lg border border-white">
-          {/* <button
-            className="text-white px-5 py-2 rounded-full font-medium text-sm transition-all shadow-sm whitespace-nowrap"
-            style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}
-          >
-            Schedule 30 Min Call
-          </button> */}
-          <Link 
-            href="http://workspace.google.com/resources/appointment-scheduling/" 
-            passHref
-            legacyBehavior
-          >
+          <Link href="http://workspace.google.com/resources/appointment-scheduling/" passHref legacyBehavior>
             <a target="_blank" rel="noopener noreferrer">
               <button
                 className="text-white px-5 py-2 rounded-full font-medium text-sm transition-all shadow-sm whitespace-nowrap"
@@ -196,17 +180,15 @@ export default function HeroSection({ isChatOpen, setIsChatOpen }: any) {
         </div>
       </div>
 
+      {/* Free Trial Modal */}
       {isFreeTrialOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop with blur effect */}
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setIsFreeTrialOpen(false)}
           />
 
-          {/* Modal container */}
           <div className="relative w-full max-w-md bg-white/90 backdrop-blur-md rounded-xl shadow-2xl border border-white/20 overflow-hidden">
-            {/* Close button */}
             <button
               onClick={() => setIsFreeTrialOpen(false)}
               className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
@@ -216,7 +198,6 @@ export default function HeroSection({ isChatOpen, setIsChatOpen }: any) {
               </svg>
             </button>
 
-            {/* Modal content */}
             <div className="p-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">Start Your Free Trial</h2>
               <p className="text-gray-600 mb-6">Get full access for 1 week with no commitment.</p>

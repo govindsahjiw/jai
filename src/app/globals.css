@@ -105,3 +105,46 @@ body {
   animation-delay: 0.7s;
 }
 
+
+@keyframes bounce200 {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes bounce400 {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-24px);
+  }
+}
+
+.animate-bounce200 {
+  animation: bounce200 1s infinite;
+}
+
+.animate-bounce400 {
+  animation: bounce400 1s infinite;
+}
+
+/* submit form  */
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
