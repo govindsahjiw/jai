@@ -73,7 +73,7 @@ const Header: React.FC<{ setSelectedItem: (item: PageKey) => void; menuItems: Me
                   <button
                     key={item.url}
                     onClick={() => handleItemClick(item.url)}
-                    className="flex items-center px-4 py-2 text-md font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    className="cursor-pointer flex items-center px-4 py-2 text-md font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                   >
                     <Icon className="mr-2" style={{ color: item.color }} />
                     {item.name}

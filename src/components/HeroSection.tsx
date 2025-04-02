@@ -208,7 +208,7 @@ export default function HeroSection({
 
           <button
             onClick={() => setIsFreeTrialOpen(true)}
-            className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-1 md:px-5 py-2 rounded-full font-medium text-xs md:text-sm transition-all whitespace-nowrap"
+            className="cursor-pointer border border-blue-600 text-blue-600 hover:bg-blue-50 px-1 md:px-5 py-2 rounded-full font-medium text-xs md:text-sm transition-all whitespace-nowrap"
           >
             1 Week Free Trial
           </button>
