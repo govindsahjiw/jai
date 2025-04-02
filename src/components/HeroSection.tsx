@@ -180,11 +180,11 @@ export default function HeroSection({
 
       {/* Right CTA Buttons */}
       <div className="absolute right-4 top-4 z-20">
-        <div className="flex flex-col gap-3 bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-lg border border-white">
+        <div className="flex flex-col gap-2 md:gap-3 bg-white/90 backdrop-blur-sm p-2 md:p-3 rounded-xl shadow-lg border border-white">
           <Link href={heroData.meeting || "http://workspace.google.com/resources/appointment-scheduling/"} passHref legacyBehavior>
             <a target="_blank" rel="noopener noreferrer">
               <button
-                className="text-white px-5 py-2 rounded-full font-medium text-sm transition-all shadow-sm whitespace-nowrap"
+                className="text-white px-2 md:px-5 px-5 py-2 rounded-full font-medium text-xs md:text-sm transition-all shadow-sm whitespace-nowrap"
                 style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}
               >
                 Schedule 30 Min Call
@@ -194,7 +194,7 @@ export default function HeroSection({
 
           <button
             onClick={() => setIsFreeTrialOpen(true)}
-            className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-5 py-2 rounded-full font-medium text-sm transition-all whitespace-nowrap"
+            className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-2 md:px-5 py-2 rounded-full font-medium text-xs md:text-sm transition-all whitespace-nowrap"
           >
             1 Week Free Trial
           </button>
