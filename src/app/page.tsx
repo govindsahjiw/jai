@@ -9,6 +9,7 @@ import CustomAISlider from "@/components/CustomAISlider";
 import ChatInterface from "@/components/ChatInterface";
 import { FaRobot } from "react-icons/fa";
 import Header from "@/components/Header";
+import Popup from "@/components/Popup";
 
 interface ApiData {
   [key: string]: {
@@ -28,6 +29,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [meetingLink, setMeetingLink] = useState<string>(''); // State for meeting link
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +55,14 @@ export default function Home() {
     };
 
     fetchData();
+
+    // Set up timer for popup
+    const timer = setTimeout(() => {
+      setIsPopupOpen(true);
+    }, 70000); // 5 seconds in milliseconds  for testing
+
+    // Cleanup timer on component unmount
+    return () => clearTimeout(timer);
   }, []);
 
   const handleSetIsChatOpen = (open: boolean, type?: string) => {
@@ -148,6 +158,10 @@ export default function Home() {
       >
         <FaRobot className="text-2xl" />
       </div>
+      <Popup 
+        isOpen={isPopupOpen} 
+        onClose={() => setIsPopupOpen(false)} 
+      />
     </div>
   );
 }
