@@ -1071,16 +1071,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
               <div className="absolute inset-0 flex items-center justify-center z-10">
                 <div className="relative bg-gradient-to-br from-[rgba(0,97,209,0.82)] to-[rgba(49,84,118,0.78)] rounded-xl shadow-md p-4 w-80 animate-slide-up">
                   <button
-                    onClick={() => {
-                      if (isCloseDisabled || (!email && !contactInput.email.trim() && !phone && !contactInput.phone.trim())) {
-                        setShowContactForm(false);
-                        if (!email && !phone && !contactInput.email.trim() && !contactInput.phone.trim()) {
-                          onClose();
-                        }
-                      }
-                    }}
-                    className={`absolute top-2 right-2 p-1 rounded-full hover:bg-white/10 transition-colors text-white ${isCloseDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
-                    disabled={isCloseDisabled}
+                    // onClick={() => {
+                    //   if (isCloseDisabled || (!email && !contactInput.email.trim() && !phone && !contactInput.phone.trim())) {
+                    //     setShowContactForm(false);
+                    //     if (!email && !phone && !contactInput.email.trim() && !contactInput.phone.trim()) {
+                    //       onClose();
+                    //     }
+                    //   }
+                    // }}
+                    onClick={onClose} 
+                    // className={`absolute top-2 right-2 p-1 rounded-full hover:bg-white/10 transition-colors text-white ${isCloseDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
+                    className={`absolute top-2 right-2 p-1 rounded-full hover:bg-white/10 transition-colors text-white`}
+                    // disabled={isCloseDisabled}
                   >
                     <AiOutlineClose size={16} />
                   </button>
