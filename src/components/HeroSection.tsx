@@ -123,7 +123,7 @@ export default function HeroSection({
       </div>
 
       {/* Left Chat Widget */}
-      <div className="absolute left-4 top-1/2 -translate-y-1/2 z-20 hidden lg:flex flex-col items-center gap-4">
+      <div className="absolute left-4 top-1/2 -translate-y-1/2 z-20 lg:flex flex-col items-center gap-4">
         <div className="relative group">
           <Image
             src={Avatar}
