@@ -123,40 +123,54 @@ export default function HeroSection({
       </div>
 
       {/* Left Chat Widget */}
-      <div className="absolute left-4 hidden top-1/2 -translate-y-1/2 z-20 lg:flex flex-col items-center gap-4">
-        <div className="relative group">
-          <Image
-            src={Avatar}
-            alt="AI Avatar"
-            width={120}
-            height={120}
-            className="rounded-full shadow-xl border-4 border-white/20 group-hover:border-blue-400 transition-all duration-300"
-          />
-        </div>
+<div className={`absolute ${isChatOpen ? 'hidden' : 'flex'} flex-col items-center gap-3 
+  left-4 top-1/2 -translate-y-1/2 z-20
+  sm:left-6
+  md:left-8
+  lg:left-10`}>
+  
+  <div className="relative group">
+    <Image
+      src={Avatar}
+      alt="AI Avatar"
+      width={80}
+      height={80}
+      className="rounded-full shadow-xl border-4 border-white/20 group-hover:border-blue-400 transition-all duration-300 
+        w-14 h-14 
+        sm:w-16 sm:h-16
+        md:w-20 md:h-20
+        lg:w-24 lg:h-24"
+    />
+  </div>
 
+  <div
+    className="relative rounded-xl p-3 shadow-xl
+      sm:p-4
+      md:p-5"
+    style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}
+  >
+    <button
+      onClick={() => setIsChatOpen(true, "talk_to_hype")}
+      className="cursor-pointer relative z-10 bg-white text-blue-600 rounded-full font-medium shadow-md hover:bg-gray-50 transition-all flex items-center gap-2
+        px-3 py-1 text-xs
+        sm:px-4 sm:py-1.5 sm:text-sm
+        md:px-5 md:py-2 md:text-base"
+    >
+      <span>Talk To Hype</span>
+      <span className="text-lg">🎙</span>
+    </button>
+
+    <div className="absolute -bottom-1 left-0 right-0 h-4 flex justify-center gap-1">
+      {[3, 5, 7, 5, 3].map((height, i) => (
         <div
-          className="relative rounded-xl p-5 shadow-xl"
-          style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}
-        >
-          <button
-            onClick={() => setIsChatOpen(true, "talk_to_hype")}
-            className="cursor-pointer relative z-10 bg-white text-blue-600 px-6 py-2 rounded-full font-medium shadow-md hover:bg-gray-50 transition-all flex items-center gap-2"
-          >
-            <span>Talk To Hype</span>
-            <span className="text-lg">🎙</span>
-          </button>
-
-          <div className="absolute -bottom-1 left-0 right-0 h-4 flex justify-center gap-1">
-            {[3, 5, 7, 5, 3].map((height, i) => (
-              <div
-                key={i}
-                className="w-1 bg-white/80 rounded-full animate-wave"
-                style={{ height: `${height}px`, animationDelay: `${i * 150}ms` }}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+          key={i}
+          className="w-1 bg-white/80 rounded-full animate-wave"
+          style={{ height: `${height}px`, animationDelay: `${i * 150}ms` }}
+        />
+      ))}
+    </div>
+  </div>
+</div>
 
       {/* Bottom Benefits Grid - For screens below md */}
       <div className="container mx-auto px-4 py-8 md:hidden">
