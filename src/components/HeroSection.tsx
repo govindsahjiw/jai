@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 import Image from "next/image";
 import Avatar from "../../public/img/avatar.webp";
 import Link from 'next/link';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Slide {
   image: string;
@@ -62,6 +62,26 @@ export default function HeroSection({
     "Predictive Analytics": "predictive_analytics",
     "Natural Language Processing": "natural_language_processing",
   };
+
+  const [meetingLink, setMeetingLink] = useState('');
+
+  // Fetch data from the REST API when the component mounts
+  useEffect(() => {
+    const fetchLink = async () => {
+      try {
+        const response = await fetch('https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhMip3u3aCJcS9-MRFNvvcV1U8l1QMBq8f7e5ETps05zxVWmhxmra0FDHvKtwA1yMP0pM8UgQVqZrfVAX7SMsiFie_MFQ0Wcw8mu-fHvibJSNecFv-GZWDhuyreynrmUkwJe4R4cTCek_7vkgxsPp_dudlE-9CbLUL6pYcuJHPnWpZJHS4yQRtRdVnQuGG5Lv8aUACbdY0-v-FCE2RDocS3I9bNhn1zL_xR9V53k1zjxzUIT-XrcOApKWl6pvb2bfFMeO2npARmeVF2INc29mCG-8Zci3hQxWrmEpqV&lib=MlhqZVQ7trLZ4_nyPCS4HqCx8ZFlIpigL');
+        const data = await response.json();
+        const link = data.form.herosection.meeting;
+        setMeetingLink(link);
+      } catch (error) {
+        console.error('Error fetching the link:', error);
+      }
+    };
+
+    fetchLink();
+  }, []); // Empty dependency array means this effect runs once when the component mounts
+
+  // const [isFreeTrialOpen, setIsFreeTrialOpen] = useState(false);
 
   return (
     <div className="relative w-full bg-gray-50">
@@ -193,7 +213,7 @@ export default function HeroSection({
       {/* Right CTA Buttons */}
       <div className="absolute right-4 top-4 z-20">
         <div className="flex flex-col gap-2 md:gap-3 bg-white/90 backdrop-blur-sm p-1 md:p-3 rounded-xl shadow-lg border border-white">
-          <Link href={heroData.meeting || "https://calendly.com/intelligentblock2018/30min"} passHref legacyBehavior>
+          <Link href={meetingLink} passHref legacyBehavior>
             <a target="_blank" rel="noopener noreferrer">
               <button
                 className="text-white px-2 md:px-5 px-5 py-2 rounded-full font-medium text-xs md:text-sm transition-all shadow-sm whitespace-nowrap"
