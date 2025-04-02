@@ -82,7 +82,7 @@ export default function HeroSection({
             <SwiperSlide key={index}>
               <div className="relative w-full h-full">
                 <Image
-                  src={slide.image || ""}
+                  src={slide.image}
                   alt={`Slide ${index + 1}`}
                   fill
                   className="object-cover"
