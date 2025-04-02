@@ -1088,7 +1088,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
                   </button>
 
                   <h3 className="text-sm font-semibold text-white mb-3 text-center">
-                    We Need Your Contact Info
+                    Subscribe for Updates & Further Information
                   </h3>
                   <form onSubmit={handleContactSubmit} className="space-y-3">
                     {!email && (
