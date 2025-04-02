@@ -112,7 +112,7 @@ export default function HeroSection({
                   <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 leading-tight">
                     {benefit.title}
                   </h3>
-                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                  <p className="text-xs text-gray-650 mt-1 line-clamp-2">
                     {benefit.description}
                   </p>
                 </div>
@@ -121,14 +121,12 @@ export default function HeroSection({
           </div>
         </div>
       </div>
-
       {/* Left Chat Widget */}
       <div className={`absolute ${isChatOpen ? 'hidden' : 'flex'} flex-col items-center gap-3 
-        left-4 top-[20%] md:top-1/2 -translate-y-1/2 z-20
+        left-4 top-2/5 md:top-1/2 -translate-y-1/2 z-20
         sm:left-6
         md:left-8
         lg:left-10`}>
-
         <div className="relative group">
           <Image
             src={Avatar}
