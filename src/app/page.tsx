@@ -1,4 +1,4 @@
-///page.tsx
+// // page.tsx
 "use client";
 import { useState, useEffect } from "react";
 import HeroSection from "../components/HeroSection";
@@ -22,11 +22,12 @@ interface ApiData {
 
 export default function Home() {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [chatType, setChatType] = useState<string>('general'); // New state for chat type
+  const [chatType, setChatType] = useState<string>('general');
   const [apiData, setApiData] = useState<ApiData | null>(null);
   const [selectedItem, setSelectedItem] = useState<string>("home");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [meetingLink, setMeetingLink] = useState<string>(''); // State for meeting link
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +37,11 @@ export default function Home() {
         );
         if (!response.ok) throw new Error("Failed to fetch data");
         const data: ApiData = await response.json();
+
+        // Extract meeting link from the herosection
+        const link = data.form?.herosection?.meeting || ''; // Adjust based on your JSON structure
+        setMeetingLink(link);
+
         setApiData(data);
         const firstPage = Object.keys(data)[0] || "home";
         setSelectedItem(firstPage);
@@ -83,13 +89,14 @@ export default function Home() {
           isChatOpen={isChatOpen} 
           setIsChatOpen={handleSetIsChatOpen} 
           heroData={currentPageData?.herosection}
+          meetingLink={meetingLink} // Pass the meeting link as a prop
         />
         <CustomAISlider 
           isChatOpen={isChatOpen} 
           setIsChatOpen={handleSetIsChatOpen} 
           sliderData={currentPageData?.customaislider}
         />
-         <UseCasesSection 
+        <UseCasesSection 
           useCasesData={currentPageData?.aisolutionsbuild} 
           isChatOpen={isChatOpen} 
           setIsChatOpen={handleSetIsChatOpen} 

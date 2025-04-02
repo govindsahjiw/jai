@@ -1,4 +1,3 @@
-// herosection.tsx
 "use client";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -7,7 +6,7 @@ import "swiper/css/pagination";
 import Image from "next/image";
 import Avatar from "../../public/img/avatar.webp";
 import Link from 'next/link';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface Slide {
   image: string;
@@ -26,20 +25,22 @@ interface HeroSectionProps {
   heroData?: {
     slides?: Slide[];
     benefits?: Benefit[];
-    meeting?: string; // Added meeting field to handle the form's meeting link
+    meeting?: string; // Add meeting link to the interface
   };
+  meetingLink: string; // Add meetingLink as a prop
 }
 
 export default function HeroSection({
   isChatOpen,
   setIsChatOpen,
-  heroData
+  heroData,
+  meetingLink, // Use the prop from page.tsx
 }: HeroSectionProps) {
   const [isFreeTrialOpen, setIsFreeTrialOpen] = useState(false);
 
   if (!heroData) return null;
 
-  // Map benefit titles to snake_case conversation types
+  // Map benefit titles to snake_case conversation types (unchanged)
   const benefitToConversationMap: Record<string, string> = {
     "Reduce development time by up to 40%": "reduce_development_time_by_up_to_40_percent",
     "Improve software quality by 30–50%": "improve_software_quality_by_30_50_percent",
@@ -62,26 +63,6 @@ export default function HeroSection({
     "Predictive Analytics": "predictive_analytics",
     "Natural Language Processing": "natural_language_processing",
   };
-
-  const [meetingLink, setMeetingLink] = useState('');
-
-  // Fetch data from the REST API when the component mounts
-  useEffect(() => {
-    const fetchLink = async () => {
-      try {
-        const response = await fetch('https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhMip3u3aCJcS9-MRFNvvcV1U8l1QMBq8f7e5ETps05zxVWmhxmra0FDHvKtwA1yMP0pM8UgQVqZrfVAX7SMsiFie_MFQ0Wcw8mu-fHvibJSNecFv-GZWDhuyreynrmUkwJe4R4cTCek_7vkgxsPp_dudlE-9CbLUL6pYcuJHPnWpZJHS4yQRtRdVnQuGG5Lv8aUACbdY0-v-FCE2RDocS3I9bNhn1zL_xR9V53k1zjxzUIT-XrcOApKWl6pvb2bfFMeO2npARmeVF2INc29mCG-8Zci3hQxWrmEpqV&lib=MlhqZVQ7trLZ4_nyPCS4HqCx8ZFlIpigL');
-        const data = await response.json();
-        const link = data.form.herosection.meeting;
-        setMeetingLink(link);
-      } catch (error) {
-        console.error('Error fetching the link:', error);
-      }
-    };
-
-    fetchLink();
-  }, []); // Empty dependency array means this effect runs once when the component mounts
-
-  // const [isFreeTrialOpen, setIsFreeTrialOpen] = useState(false);
 
   return (
     <div className="relative w-full bg-gray-50">
@@ -216,7 +197,7 @@ export default function HeroSection({
           <Link href={meetingLink} passHref legacyBehavior>
             <a target="_blank" rel="noopener noreferrer">
               <button
-                className="text-white px-2 md:px-5 px-5 py-2 rounded-full font-medium text-xs md:text-sm transition-all shadow-sm whitespace-nowrap"
+                className="cursor-pointer text-white px-2 md:px-5 px-5 py-2 rounded-full font-medium text-xs md:text-sm transition-all shadow-sm whitespace-nowrap"
                 style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}
               >
                 Schedule 30 Min Call
@@ -255,7 +236,12 @@ export default function HeroSection({
               <h2 className="text-2xl font-bold text-gray-800 mb-4">Start Your Free Trial</h2>
               <p className="text-gray-600 mb-6">Get full access for 1 week with no commitment.</p>
 
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={(e) => {
+                e.preventDefault();
+                // Handle form submission here (e.g., send data to an API)
+                console.log("Form submitted");
+                setIsFreeTrialOpen(false);
+              }}>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                   <input
@@ -303,4 +289,3 @@ export default function HeroSection({
     </div>
   );
 }
-
