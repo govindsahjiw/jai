@@ -61,14 +61,46 @@ export default function Home() {
   };
 
   if (loading) return (
-    <div className="w-full min-h-screen flex items-center justify-center">
-      <div className="flex flex-col items-center space-y-4">
-        <div className="flex space-x-2">
-          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce"></div>
-          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce200"></div>
-          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce400"></div>
+    <div className="w-full min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="relative w-64 h-64">
+        {/* Circular text path */}
+        <div className="absolute w-full h-full animate-rotate-text z-10">
+          <div className="relative w-full h-full">
+            {Array.from({ length: 18 }).map((_, i) => (
+              <span 
+                key={i}
+                className="absolute text-blue-600 font-medium text-lg"
+                style={{
+                  transform: `rotate(${i * 20}deg) translateX(80px) rotate(-${i * 20}deg)`,
+                  transformOrigin: '0 0',
+                  opacity: i % 3 === 0 ? 1 : 0.6
+                }}
+              >
+                {i % 1 === 0 ? 'yawofniiaJ'.split('')[i/1] : '•'}
+              </span>
+            ))}
+          </div>
         </div>
-        <div className="text-md text-gray-700 font-semibold">Welcome to jAI!</div>
+  
+        {/* Pulsing center dots */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+          {[0, 1, 2, 3].map((index) => (
+            <div
+              key={index}
+              className="absolute w-3 h-3 bg-blue-500 rounded-full animate-wave"
+              style={{
+                animationDelay: `${index * 0.2}s`,
+                left: `${Math.cos(index * Math.PI/2) * 10}px`,
+                top: `${Math.sin(index * Math.PI/2) * 10}px`
+              }}
+            ></div>
+          ))}
+        </div>
+        
+        {/* jAI logo - now properly above all other elements */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 text-white rounded-full flex items-center justify-center font-bold z-30" style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}>
+          jAI
+        </div>
       </div>
     </div>
   );
