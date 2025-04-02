@@ -86,6 +86,7 @@ export default function HeroSection({
                   alt={`Slide ${index + 1}`}
                   fill
                   className="object-cover"
+                  unoptimized
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-black">
                   <h1 className="text-xl md:text-3xl font-bold mb-4 animate-slide-up p-2 border-2 border-transparent border-gradient rounded-lg">

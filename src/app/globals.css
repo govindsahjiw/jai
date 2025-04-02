@@ -148,3 +148,54 @@ body {
   }
 }
 
+/* // loader  */
+
+/* Existing slide-in animation (keep if needed elsewhere) */
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* New animation for rotating around a circle */
+.animate-rotate-circle {
+  animation: rotateAround 1.5s linear infinite;
+  position: absolute;
+  top: -20px; /* Adjust distance from center */
+  left: 50%; /* Start from the center horizontally */
+  transform-origin: 0 20px; /* Rotate around the center dot */
+}
+
+.animate-rotate-text {
+  animation: rotateAround 1.5s linear infinite;
+  position: absolute;
+  top: -30px; /* Adjust distance for text */
+  left: 50%;
+  transform-origin: 0 30px; /* Rotate around the center dot */
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+/* Keyframe for circular rotation */
+@keyframes rotateAround {
+  from {
+    transform: rotate(0deg) translateX(40px) rotate(0deg); /* Radius of 40px */
+  }
+  to {
+    transform: rotate(360deg) translateX(40px) rotate(-360deg); /* Full circle */
+  }
+}
+
+.delay-200 {
+  animation-delay: 0.2s; /* Stagger the second dot */
+}
+
+/* end loader  */
