@@ -124,7 +124,7 @@ export default function HeroSection({
 
       {/* Left Chat Widget */}
       <div className={`absolute ${isChatOpen ? 'hidden' : 'flex'} flex-col items-center gap-3 
-        left-4 top-1/3 md:top-1/2 -translate-y-1/2 z-20
+        left-4 top-[20%] md:top-1/2 -translate-y-1/2 z-20
         sm:left-6
         md:left-8
         lg:left-10`}>
