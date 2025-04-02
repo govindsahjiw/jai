@@ -10,7 +10,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-30 backdrop-blur-md flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-transparent bg-opacity-30 backdrop-blur-md flex items-center justify-center z-[999]" style={{zIndex: 999}}>
       <div className="relative p-6 rounded-xl shadow-2xl max-w-lg w-full mx-4 transform transition-all duration-500 scale-100 hover:scale-105 flex" style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}>
         {/* Left Side: Logo and Stay Connected */}
         <div className="w-1/3 flex flex-col items-center justify-center">
