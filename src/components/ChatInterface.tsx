@@ -89,7 +89,10 @@ type ConversationKey =
   | 'video_3'
   | 'video_4'
   | 'video_5'
-  | 'video_6';
+  | 'video_6'
+  | 'video_7'
+  | 'video_8'
+  | 'video_9';
 
 interface ChatMessage {
   text: string;
@@ -793,7 +796,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       {
         text: "This video showcases our AI-powered development process for rapid prototyping.",
         type: "answer",
-        video: "/vid/1.mp4"
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/1.mp4"
       },
       { text: "Want to learn more about how we can accelerate your project?", type: "question" },
     ],
@@ -802,7 +805,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       {
         text: "This video highlights our modular component library in action.",
         type: "answer",
-        video: "/vid/2.mp4"
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/2.mp4"
       },
       { text: "Interested in reusable components for your app?", type: "question" },
     ],
@@ -811,7 +814,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       {
         text: "This video demonstrates real-time API integration with Node.js.",
         type: "answer",
-        video: "/vid/3.mp4"
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/3.mp4"
       },
       { text: "Need real-time features in your application?", type: "question" },
     ],
@@ -820,7 +823,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       {
         text: "This video shows our AI-driven testing automation in action.",
         type: "answer",
-        video: "/vid/4.mp4"
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/4.mp4"
       },
       { text: "How can we improve your testing process?", type: "question" },
     ],
@@ -829,7 +832,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       {
         text: "This video explores our serverless architecture solutions.",
         type: "answer",
-        video: "/vid/5.mp4"
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/5.mp4"
       },
       { text: "Curious about serverless benefits for your project?", type: "question" },
     ],
@@ -838,7 +841,34 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       {
         text: "This video features our predictive analytics capabilities.",
         type: "answer",
-        video: "/vid/6.mp4"
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/6.mp4"
+      },
+      { text: "Want to leverage predictive insights for your business?", type: "question" },
+    ],
+    video_7: [
+      { text: "You clicked on Video 7!", type: "question" },
+      {
+        text: "This video features our predictive analytics capabilities.",
+        type: "answer",
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/7.mp4"
+      },
+      { text: "Want to leverage predictive insights for your business?", type: "question" },
+    ],
+    video_8: [
+      { text: "You clicked on Video 8!", type: "question" },
+      {
+        text: "This video features our predictive analytics capabilities.",
+        type: "answer",
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/8.mp4"
+      },
+      { text: "Want to leverage predictive insights for your business?", type: "question" },
+    ],
+    video_9: [
+      { text: "You clicked on Video 9!", type: "question" },
+      {
+        text: "This video features our predictive analytics capabilities.",
+        type: "answer",
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/3.mp4"
       },
       { text: "Want to leverage predictive insights for your business?", type: "question" },
     ],
