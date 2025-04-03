@@ -89,7 +89,10 @@ type ConversationKey =
   | 'video_3'
   | 'video_4'
   | 'video_5'
-  | 'video_6';
+  | 'video_6'
+  | 'video_7'
+  | 'video_8'
+  | 'video_9';
 
 interface ChatMessage {
   text: string;
@@ -116,7 +119,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
   const [showContactForm, setShowContactForm] = useState(false);
   const [contactInput, setContactInput] = useState({ email: '', phone: '' });
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission status
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  
   const conversationMap: Record<ConversationKey, ChatMessage[]> = {
     general: [
       { text: "Welcome to Jai Info Way, official website.", type: "question" },
@@ -793,7 +798,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       {
         text: "This video showcases our AI-powered development process for rapid prototyping.",
         type: "answer",
-        video: "/vid/1.mp4"
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/1.mp4"
       },
       { text: "Want to learn more about how we can accelerate your project?", type: "question" },
     ],
@@ -802,7 +807,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       {
         text: "This video highlights our modular component library in action.",
         type: "answer",
-        video: "/vid/2.mp4"
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/2.mp4"
       },
       { text: "Interested in reusable components for your app?", type: "question" },
     ],
@@ -811,7 +816,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       {
         text: "This video demonstrates real-time API integration with Node.js.",
         type: "answer",
-        video: "/vid/3.mp4"
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/3.mp4"
       },
       { text: "Need real-time features in your application?", type: "question" },
     ],
@@ -820,7 +825,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       {
         text: "This video shows our AI-driven testing automation in action.",
         type: "answer",
-        video: "/vid/4.mp4"
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/4.mp4"
       },
       { text: "How can we improve your testing process?", type: "question" },
     ],
@@ -829,7 +834,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       {
         text: "This video explores our serverless architecture solutions.",
         type: "answer",
-        video: "/vid/5.mp4"
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/5.mp4"
       },
       { text: "Curious about serverless benefits for your project?", type: "question" },
     ],
@@ -838,7 +843,34 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       {
         text: "This video features our predictive analytics capabilities.",
         type: "answer",
-        video: "/vid/6.mp4"
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/6.mp4"
+      },
+      { text: "Want to leverage predictive insights for your business?", type: "question" },
+    ],
+    video_7: [
+      { text: "You clicked on Video 7!", type: "question" },
+      {
+        text: "This video features our predictive analytics capabilities.",
+        type: "answer",
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/7.mp4"
+      },
+      { text: "Want to leverage predictive insights for your business?", type: "question" },
+    ],
+    video_8: [
+      { text: "You clicked on Video 8!", type: "question" },
+      {
+        text: "This video features our predictive analytics capabilities.",
+        type: "answer",
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/8.mp4"
+      },
+      { text: "Want to leverage predictive insights for your business?", type: "question" },
+    ],
+    video_9: [
+      { text: "You clicked on Video 9!", type: "question" },
+      {
+        text: "This video features our predictive analytics capabilities.",
+        type: "answer",
+        video: "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/3.mp4"
       },
       { text: "Want to leverage predictive insights for your business?", type: "question" },
     ],
@@ -859,6 +891,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       setShowPrompt(false);
       setInputMessage("");
       setContactInput({ email: '', phone: '' });
+      setSubmissionError(null);
     } else {
       setMessages([]);
       setCurrentMessage("");
@@ -868,22 +901,51 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, conversa
       setShowPrompt(false);
       setInputMessage("");
       setContactInput({ email: '', phone: '' });
+      setSubmissionError(null);
     }
   }, [isOpen, conversationType]);
 
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (contactInput.email && !email) {
-      setEmail(contactInput.email);
-    }
-    if (contactInput.phone && !phone) {
-      setPhone(contactInput.phone);
-    }
-    setShowContactForm(false);
-    setContactInput({ email: '', phone: '' });
-    setIsTyping(false); // Resume typing or allow chat to continue
+// Handle form submission with API call
+const handleContactSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+  setSubmissionError(null);
+
+  const data = {
+    email: contactInput.email.trim(),
+    phone: contactInput.phone.trim(),
   };
 
+  try {
+    const response = await fetch(
+      "https://script.google.com/macros/s/AKfycbz0YiHLDkFRvy4pVOjvW9Prb1QK2nTppv658kr5QedNHk_5Efz9LEaJ6YpJu1_JrZQOJA/exec",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        mode: "no-cors", // Use no-cors since Google Apps Script doesn't return CORS headers
+      }
+    );
+
+    // Since mode is "no-cors", we can't read the response body directly
+    // Assume success if no network error occurs
+    if (contactInput.email && !email) setEmail(contactInput.email);
+    if (contactInput.phone && !phone) setPhone(contactInput.phone);
+    setShowContactForm(false);
+    setContactInput({ email: '', phone: '' });
+    setMessages((prev) => [
+      ...prev,
+      { text: "Thank you! Your contact information has been saved.", type: "answer" },
+    ]);
+  } catch (error) {
+    console.error("Error submitting contact data:", error);
+    setSubmissionError("Failed to save contact information. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   useEffect(() => {
     if (isOpen && !showContactForm && messageIndex < conversationMap[conversationType].length && !isTyping) {

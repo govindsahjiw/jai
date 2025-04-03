@@ -59,7 +59,7 @@ export default function Home() {
     // Set up timer for popup
     const timer = setTimeout(() => {
       setIsPopupOpen(true);
-    }, 5000); // 5 seconds in milliseconds  for testing
+    }, 70000); // 5 seconds in milliseconds  for testing
 
     // Cleanup timer on component unmount
     return () => clearTimeout(timer);

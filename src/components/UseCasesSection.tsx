@@ -122,12 +122,15 @@ export default function UseCasesSection({
 
   // Mapping of video URLs to conversation types (using snake_case)
   const videoToConversationMap: Record<string, string> = {
-    "/vid/1.mp4": "video_1",
-    "/vid/2.mp4": "video_2",
-    "/vid/3.mp4": "video_3",
-    "/vid/4.mp4": "video_4",
-    "/vid/5.mp4": "video_5",
-    "/vid/6.mp4": "video_6",
+    "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/1.mp4": "video_1",
+    "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/2.mp4": "video_2",
+    "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/3.mp4": "video_3",
+    "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/4.mp4": "video_4",
+    "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/5.mp4": "video_5",
+    "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/6.mp4": "video_6",
+    "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/7.mp4": "video_7",
+    "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/8.mp4": "video_8",
+    "https://jaiinfowaywebsite.s3.us-east-1.amazonaws.com/videos/9.mp4": "video_9",
   };
 
   const handleVideoClick = (videoUrl: string) => {
