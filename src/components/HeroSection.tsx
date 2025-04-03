@@ -217,7 +217,7 @@ export default function HeroSection({
 
       {/* NEW CHAT MODAL */}
       {isChatModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{zIndex: 99999}}>
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setIsChatModalOpen(false)}
