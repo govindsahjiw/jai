@@ -85,7 +85,7 @@ export default function Home() {
             e.currentTarget.src = "/img/fallback-loader.svg";
           }}
         />
-        <p className="mt-3 text-gray-500">Please wait...</p>
+        <p className="mt-3 text-gray-500">Welcome To JaiInfoWay...</p>
       </div>
     </div>
   );
