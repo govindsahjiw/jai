@@ -192,14 +192,14 @@ export default function HeroSection({
           style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}
         >
           <button
-            onClick={() => setIsChatModalOpen(true)} // UPDATED: Opens new modal instead
+            onClick={() => setIsChatModalOpen(true)} 
 
             className="cursor-pointer relative z-10 bg-white text-blue-600 rounded-full font-medium shadow-md hover:bg-gray-50 transition-all flex items-center gap-2
             px-3 py-1 text-xs
             sm:px-4 sm:py-1.5 sm:text-sm
             md:px-5 md:py-2 md:text-base"
           >
-            <span>Talk To Hype</span>
+            <span>Talk To jAI</span>
             <span className="text-lg">🎙</span>
           </button>
 
@@ -242,7 +242,7 @@ export default function HeroSection({
                   height={48}
                   className="rounded-full"
                 />
-                <h2 className="text-xl font-bold text-gray-800">Chat with Hype</h2>
+                <h2 className="text-xl font-bold text-gray-800">Chat with jAI</h2>
               </div>
 
               <div className="h-64 mb-4 p-4 bg-gray-50 rounded-lg overflow-y-auto">
