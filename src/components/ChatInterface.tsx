@@ -1013,8 +1013,8 @@ const handleContactSubmit = async (e: React.FormEvent) => {
     >
       {isOpen && (
         <>
-          <div className="text-white p-4 rounded-tl-lg rounded-tr-lg flex justify-between items-center" style={{
-            background: 'linear-gradient(135deg, rgba(0, 97, 209, 0.82) 0%, rgba(49, 84, 118, 0.78) 100%)'
+          <div className="text-white p-4 rounded-tl-lg rounded-tr-lg flex justify-between items-center z-100" style={{
+            background: 'linear-gradient(135deg, rgba(0, 97, 209, 0.82) 0%, rgba(49, 84, 118, 0.78) 100%)', zIndex: 9999
           }}>
             <div className="flex items-center">
               <div className="bg-white/20 p-2 rounded-full mr-3">
@@ -1034,122 +1034,114 @@ const handleContactSubmit = async (e: React.FormEvent) => {
               </button>
             </div>
           </div>
-
+          
           <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
-            {messages.length === 0 && !isTyping && (
-              <div className="flex flex-col items-center justify-center h-full text-center">
-                <div className="bg-blue-100 p-4 rounded-full mb-4">
-                  <FaRobot className="text-blue-600 text-2xl" />
-                </div>
-                <h4 className="text-lg font-medium text-gray-700">JAI InfoWay Assistant</h4>
-                <p className="text-gray-500 mt-2">How can I help you today?</p>
-              </div>
-            )}
-
-            {messages.map((msg, index) => (
-              <div key={index} className={`flex mb-4 ${msg.type === "question" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[80%] flex ${msg.type === "question" ? "flex-row-reverse" : "flex-row"}`}>
-                  <div className={`flex-shrink-0 mt-1 ${msg.type === "question" ? "ml-3" : "mr-3"}`}>
-                    {msg.type === "question" ? (
-                      <div className="p-2 rounded-full" style={{
-                        background: 'linear-gradient(135deg, rgba(0, 97, 209, 0.82) 0%, rgba(49, 84, 118, 0.78) 100%)'
-                      }}>
-                        <FaUser className="text-white text-sm" />
-                      </div>
-                    ) : (
-                      <div className="bg-gray-200 p-2 rounded-full">
-                        <FaRobot className="text-gray-700 text-sm" />
-                      </div>
-                    )}
+            <div className={`transition-opacity duration-300 ${showContactForm ? 'blur-md opacity-30' : ''}`}>
+              {messages.length === 0 && !isTyping && (
+                <div className="flex flex-col items-center justify-center h-full text-center">
+                  <div className="bg-blue-100 p-4 rounded-full mb-4">
+                    <FaRobot className="text-blue-600 text-2xl" />
                   </div>
-                  <div>
-                    {msg.image && (
-                      <div className={`mb-2 rounded-lg overflow-hidden ${msg.type === "question" ? "ml-auto" : "mr-auto"}`}>
-                        <img src={msg.image} alt="Chat content" className="w-full h-auto max-h-48 object-cover" />
-                      </div>
-                    )}
-                    {msg.video && (
-                      <div className={`mb-2 rounded-lg overflow-hidden ${msg.type === "question" ? "ml-auto" : "mr-auto"}`}>
-                        <video src={msg.video} controls className="w-full h-auto max-h-48 object-cover" />
-                      </div>
-                    )}
-                    <div className={`p-3 rounded-xl ${msg.type === "question"
-                      ? "bg-gradient-to-br from-[rgba(0,97,209,0.82)] to-[rgba(49,84,118,0.78)] text-white rounded-br-none"
-                      : "bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm"
-                      }`}>
-                      <p className="text-sm">{msg.text}</p>
-                    </div>
-                    <div className={`flex mt-1 ${msg.type === "question" ? "justify-end" : "justify-start"}`}>
-                      <button onClick={() => handleCopy(msg.text)} className="text-gray-500 hover:text-blue-600 transition-colors p-1" title="Copy">
-                        <AiOutlineCopy size={14} />
-                      </button>
-                      {typeof navigator.share === 'function' && (
-                        <button onClick={() => handleShare(msg.text)} className="text-gray-500 hover:text-blue-600 transition-colors p-1 ml-1" title="Share">
-                          <AiOutlineShareAlt size={14} />
-                        </button>
+                  <h4 className="text-lg font-medium text-gray-700">JAI InfoWay Assistant</h4>
+                  <p className="text-gray-500 mt-2">How can I help you today?</p>
+                </div>
+              )}
+
+              {messages.map((msg, index) => (
+                <div key={index} className={`flex mb-4 ${msg.type === "question" ? "justify-end" : "justify-start"}`}>
+                  <div className={`max-w-[80%] flex ${msg.type === "question" ? "flex-row-reverse" : "flex-row"}`}>
+                    <div className={`flex-shrink-0 mt-1 ${msg.type === "question" ? "ml-3" : "mr-3"}`}>
+                      {msg.type === "question" ? (
+                        <div className="p-2 rounded-full" style={{
+                          background: 'linear-gradient(135deg, rgba(0, 97, 209, 0.82) 0%, rgba(49, 84, 118, 0.78) 100%)'
+                        }}>
+                          <FaUser className="text-white text-sm" />
+                        </div>
+                      ) : (
+                        <div className="bg-gray-200 p-2 rounded-full">
+                          <FaRobot className="text-gray-700 text-sm" />
+                        </div>
                       )}
                     </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            {isTyping && (
-              <div className="flex mb-4 justify-start">
-                <div className="flex-shrink-0 mr-3 mt-1">
-                  <div className="bg-gray-200 p-2 rounded-full">
-                    <FaRobot className="text-gray-700 text-sm" />
-                  </div>
-                </div>
-                <div>
-                  {conversationMap[conversationType][messageIndex]?.image && (
-                    <div className="mb-2 rounded-lg overflow-hidden">
-                      <img src={conversationMap[conversationType][messageIndex].image} alt="Chat content" className="w-full h-auto max-h-48 object-cover" />
+                    <div>
+                      {msg.image && (
+                        <div className={`mb-2 rounded-lg overflow-hidden ${msg.type === "question" ? "ml-auto" : "mr-auto"}`}>
+                          <img src={msg.image} alt="Chat content" className="w-full h-auto max-h-48 object-cover" />
+                        </div>
+                      )}
+                      {msg.video && (
+                        <div className={`mb-2 rounded-lg overflow-hidden ${msg.type === "question" ? "ml-auto" : "mr-auto"}`}>
+                          <video src={msg.video} controls className="w-full h-auto max-h-48 object-cover" />
+                        </div>
+                      )}
+                      <div className={`p-3 rounded-xl ${msg.type === "question"
+                        ? "bg-gradient-to-br from-[rgba(0,97,209,0.82)] to-[rgba(49,84,118,0.78)] text-white rounded-br-none"
+                        : "bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm"
+                        }`}>
+                        <p className="text-sm">{msg.text}</p>
+                      </div>
+                      <div className={`flex mt-1 ${msg.type === "question" ? "justify-end" : "justify-start"}`}>
+                        <button onClick={() => handleCopy(msg.text)} className="text-gray-500 hover:text-blue-600 transition-colors p-1" title="Copy">
+                          <AiOutlineCopy size={14} />
+                        </button>
+                        {typeof navigator.share === 'function' && (
+                          <button onClick={() => handleShare(msg.text)} className="text-gray-500 hover:text-blue-600 transition-colors p-1 ml-1" title="Share">
+                            <AiOutlineShareAlt size={14} />
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  )}
-                  {conversationMap[conversationType][messageIndex]?.video && (
-                    <div className="mb-2 rounded-lg overflow-hidden">
-                      <video src={conversationMap[conversationType][messageIndex].video} controls className="w-full h-auto max-h-48 object-cover" />
-                    </div>
-                  )}
-                  <div className="bg-white border border-gray-200 text-gray-800 p-3 rounded-xl rounded-bl-none shadow-sm max-w-[80%]">
-                    <p className="text-sm">{currentMessage}</p>
                   </div>
                 </div>
-              </div>
-            )}
+              ))}
 
-            {showPrompt && (
-              <div className="flex justify-center mt-4 mb-2">
-                <p className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                  Ask me anything about our services
-                </p>
-              </div>
-            )}
+              {isTyping && (
+                <div className="flex mb-4 justify-start">
+                  <div className="flex-shrink-0 mr-3 mt-1">
+                    <div className="bg-gray-200 p-2 rounded-full">
+                      <FaRobot className="text-gray-700 text-sm" />
+                    </div>
+                  </div>
+                  <div>
+                    {conversationMap[conversationType][messageIndex]?.image && (
+                      <div className="mb-2 rounded-lg overflow-hidden">
+                        <img src={conversationMap[conversationType][messageIndex].image} alt="Chat content" className="w-full h-auto max-h-48 object-cover" />
+                      </div>
+                    )}
+                    {conversationMap[conversationType][messageIndex]?.video && (
+                      <div className="mb-2 rounded-lg overflow-hidden">
+                        <video src={conversationMap[conversationType][messageIndex].video} controls className="w-full h-auto max-h-48 object-cover" />
+                      </div>
+                    )}
+                    <div className="bg-white border border-gray-200 text-gray-800 p-3 rounded-xl rounded-bl-none shadow-sm max-w-[80%]">
+                      <p className="text-sm">{currentMessage}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-            <div ref={messagesEndRef} />
+              {showPrompt && (
+                <div className="flex justify-center mt-4 mb-2">
+                  <p className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                    Ask me anything about our services
+                  </p>
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
 
             {(showContactForm || shouldShowContactForm) && (
               <div className="absolute inset-0 flex items-center justify-center z-10">
                 <div className="relative bg-gradient-to-br from-[rgba(0,97,209,0.82)] to-[rgba(49,84,118,0.78)] rounded-xl shadow-md p-4 w-80 animate-slide-up">
                   <button
-                    // onClick={() => {
-                    //   if (isCloseDisabled || (!email && !contactInput.email.trim() && !phone && !contactInput.phone.trim())) {
-                    //     setShowContactForm(false);
-                    //     if (!email && !phone && !contactInput.email.trim() && !contactInput.phone.trim()) {
-                    //       onClose();
-                    //     }
-                    //   }
-                    // }}
                     onClick={onClose} 
-                    // className={`absolute top-2 right-2 p-1 rounded-full hover:bg-white/10 transition-colors text-white ${isCloseDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
                     className={`absolute top-2 right-2 p-1 rounded-full hover:bg-white/10 transition-colors text-white`}
-                    // disabled={isCloseDisabled}
                   >
                     <AiOutlineClose size={16} />
                   </button>
 
-                  <h3 className="text-sm font-semibold text-white mb-3 text-center">
+                  <h3 className="text-sm font-semibold text-white mb-3 text-left">
                     Subscribe for Updates & Further Information
                   </h3>
                   <form onSubmit={handleContactSubmit} className="space-y-3">
@@ -1190,7 +1182,6 @@ const handleContactSubmit = async (e: React.FormEvent) => {
               </div>
             )}
           </div>
-
           <div className="p-3 bg-white border-t border-gray-200">
             <div className="flex items-center">
               <input
