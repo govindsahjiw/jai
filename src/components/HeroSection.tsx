@@ -37,7 +37,8 @@ export default function HeroSection({
   meetingLink, // Use the prop from page.tsx
 }: HeroSectionProps) {
   const [isFreeTrialOpen, setIsFreeTrialOpen] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   if (!heroData) return null;
 
   // Map benefit titles to snake_case conversation types (unchanged)
@@ -64,6 +65,46 @@ export default function HeroSection({
     "Natural Language Processing": "natural_language_processing",
   };
 
+  const handleFreeTrialSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitMessage(null);
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      fullName: formData.get("fullName") as string,
+      email: formData.get("email") as string,
+      company: formData.get("company") as string,
+      ipAddress: formData.get("ipAddress") as string,
+    };
+
+    try {
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbyKXFC3svp6k1lVzjIYvLIuXuMXzlTXeOiyijrtof0Dxk54rjfPMOnA28JAFGgtTFo/exec",
+        {
+          method: "POST",
+          mode: "no-cors", // Google Apps Script requires no-cors mode
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      // Since we're using no-cors, we can't read the response body directly
+      // but if the request succeeds, we assume it worked
+      setSubmitMessage("Free trial request submitted successfully!");
+      setTimeout(() => {
+        setIsFreeTrialOpen(false);
+        setSubmitMessage(null);
+      }, 2000);
+    } catch (error) {
+      console.error("Error submitting free trial:", error);
+      setSubmitMessage("Failed to submit. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <div className="relative w-full bg-gray-50">
       {/* Swiper Slider */}
@@ -237,16 +278,12 @@ export default function HeroSection({
               <h2 className="text-2xl font-bold text-gray-800 mb-4">Start Your Free Trial</h2>
               <p className="text-gray-600 mb-6">Get full access for 1 week with no commitment.</p>
 
-              <form className="space-y-4" onSubmit={(e) => {
-                e.preventDefault();
-                // Handle form submission here (e.g., send data to an API)
-                console.log("Form submitted");
-                setIsFreeTrialOpen(false);
-              }}>
+              <form className="space-y-4" onSubmit={handleFreeTrialSubmit}>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                   <input
                     type="text"
+                    name="fullName"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="John Doe"
                     required
@@ -257,6 +294,7 @@ export default function HeroSection({
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                   <input
                     type="email"
+                    name="email"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="your@email.com"
                     required
@@ -267,17 +305,38 @@ export default function HeroSection({
                   <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
                   <input
                     type="text"
+                    name="company"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Your company (optional)"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">IP Address</label>
+                  <input
+                    type="text"
+                    name="ipAddress"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="IP Address"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-md"
+                  disabled={isSubmitting}
+                  className={`w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-md ${
+                    isSubmitting ? "opacity-75 cursor-not-allowed" : ""
+                  }`}
                 >
-                  Start Free Trial
+                  {isSubmitting ? "Submitting..." : "Start Free Trial"}
                 </button>
+
+                {submitMessage && (
+                  <p className={`text-sm text-center mt-4 ${
+                    submitMessage.includes("success") ? "text-green-600" : "text-red-600"
+                  }`}>
+                    {submitMessage}
+                  </p>
+                )}
 
                 <p className="text-xs text-gray-500 text-center mt-4">
                   By signing up, you agree to our Terms of Service and Privacy Policy.
