@@ -98,7 +98,7 @@ export default function Home() {
         {/* Text with your gradient colors */}
         <div className="space-y-2">
           <h2 
-            className="text-3xl font-bold tracking-tight"
+            className="text-lg md:text-2xl font-bold tracking-tight"
             style={{ 
               background: "linear-gradient(to right, #0061d1d1, #315476c7)",
               WebkitBackgroundClip: 'text',
@@ -106,7 +106,7 @@ export default function Home() {
               color: 'transparent'
             }}
           >
-            Welcome To Jai-Info Way
+            Welcome To Jai Infoway
           </h2>
           <p className="text-gray-500 dark:text-gray-400 font-medium">
             Loading your experience...
