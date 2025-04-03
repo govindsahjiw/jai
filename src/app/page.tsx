@@ -74,18 +74,55 @@ export default function Home() {
   };
 
   if (loading) return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-white">
-      <div className="text-center">
-        <img
-          src="/img/loader.gif"
-          alt="Loading"
-          className="mx-auto w-24 h-24 object-contain"
-          onError={(e) => {
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = "/img/fallback-loader.svg";
-          }}
-        />
-        <p className="mt-3 text-gray-500">Welcome To Jai-Info Way...</p>
+    <div className="w-full min-h-screen flex items-center justify-center bg-white transition-colors duration-300">
+      <div className="text-center space-y-6">
+        {/* Animated loader with your gradient */}
+        <div className="relative mx-auto w-32 h-32 flex items-center justify-center">
+          <div 
+            className="absolute w-full h-full rounded-full animate-spin-slow"
+            style={{ 
+              opacity: 0.2 
+            }}
+          ></div>
+          <img
+            src="/img/loader.gif"
+            alt="Loading"
+            className="relative z-10 w-24 h-24 object-contain"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/img/fallback-loader.svg";
+            }}
+          />
+        </div>
+  
+        {/* Text with your gradient colors */}
+        <div className="space-y-2">
+          <h2 
+            className="text-3xl font-bold tracking-tight"
+            style={{ 
+              background: "linear-gradient(to right, #0061d1d1, #315476c7)",
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              color: 'transparent'
+            }}
+          >
+            Welcome To Jai-Info Way
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400 font-medium">
+            Loading your experience...
+          </p>
+        </div>
+  
+        {/* Progress bar with your gradient */}
+        <div className="w-56 mx-auto h-1.5 rounded-full overflow-hidden">
+          <div 
+            className="h-full animate-progress"
+            style={{ 
+              background: "linear-gradient(to right, #0061d1d1, #315476c7)",
+              animation: 'progress 2.5s ease-in-out infinite'
+            }}
+          ></div>
+        </div>
       </div>
     </div>
   );
