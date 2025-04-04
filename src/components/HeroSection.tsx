@@ -858,7 +858,6 @@ export default function HeroSection({
       )}
 
       {/* Rest of your component remains the same */}
-      {/* Bottom Benefits Grid - For screens below md */}
       <div className="container mx-auto px-4 py-8 md:hidden">
         <div className="grid grid-cols-1 gap-3">
           {heroData.benefits?.map((benefit, index) => (
