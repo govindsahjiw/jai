@@ -974,18 +974,39 @@ const handleContactSubmit = async (e: React.FormEvent) => {
     }
   }, [isOpen, messageIndex, isTyping, conversationType, showContactForm, email, phone]);
 
+  
+
   const fetchOpenAIResponse = async (userMessage: string) => {
-    setIsTyping(true); // Show typing indicator while waiting for OpenAI response
+    setIsTyping(true);
     try {
-      const response = await fetch('http://localhost:3001/api/chat', {
+      // NEW: Prepare the conversation history with static messages as context
+      const staticMessages = conversationMap[conversationType].map((msg) => ({
+        role: msg.type === "question" ? "user" : "assistant",
+        content: msg.text,
+      }));
+
+      // NEW: Combine static messages with the user's new message
+      const messagesForOpenAI = [
+        ...staticMessages,
+        { role: "user", content: userMessage },
+      ];
+
+      // const response = await fetch('http://localhost:3001/api/chat', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     messages: messagesForOpenAI, // Send the full context to OpenAI
+      //   }),
+      // });
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          messages: [
-            { role: "user", content: userMessage },
-          ],
+          messages: messagesForOpenAI,
         }),
       });
 
@@ -995,7 +1016,7 @@ const handleContactSubmit = async (e: React.FormEvent) => {
 
       const data = await response.json();
       const aiMessage: ChatMessage = {
-        text: data.content, // Extract the content from OpenAI response
+        text: data.content, // Extract OpenAI's response
         type: "answer",
       };
       setMessages((prev) => [...prev, aiMessage]);
@@ -1006,7 +1027,7 @@ const handleContactSubmit = async (e: React.FormEvent) => {
         { text: "Sorry, something went wrong. Please try again.", type: "answer" },
       ]);
     } finally {
-      setIsTyping(false); // Hide typing indicator after response
+      setIsTyping(false);
     }
   };
 
