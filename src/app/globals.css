@@ -148,52 +148,19 @@ body {
   }
 }
 
-/* // loader  */
-/* Animation for rotating elements around the center */
-.animate-rotate-circle {
-  animation: rotateAround 1.5s linear infinite;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform-origin: 0 0;
+
+/* // aoder  */
+@keyframes progress {
+  0% { width: 0%; opacity: 0.8; }
+  70% { width: 100%; opacity: 1; }
+  100% { width: 0%; opacity: 0.8; }
 }
 
-/* Animation for rotating text (not used directly for curve, but kept for dots) */
-.animate-rotate-text {
-  animation: rotateAround 1.5s linear infinite;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform-origin: 0 0;
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Keyframe for circular rotation */
-@keyframes rotateAround {
-  0% {
-    transform: rotate(0deg) translateX(60px) rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg) translateX(60px) rotate(-360deg);
-  }
-}
-
-
-/* Circular text rotation */
-.animate-rotate-text {
-  animation: rotateText 12s linear infinite;
-}
-
-@keyframes rotateText {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Wave animation for dots */
-.animate-wave {
-  animation: wave 1.2s ease-in-out infinite;
-}
-
-@keyframes wave {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
 }

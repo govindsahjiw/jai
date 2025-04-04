@@ -74,45 +74,54 @@ export default function Home() {
   };
 
   if (loading) return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="relative w-64 h-64">
-        {/* Circular text path */}
-        <div className="absolute w-full h-full animate-rotate-text z-10">
-          <div className="relative w-full h-full">
-            {Array.from({ length: 18 }).map((_, i) => (
-              <span 
-                key={i}
-                className="absolute text-blue-600 font-medium text-lg"
-                style={{
-                  transform: `rotate(${i * 20}deg) translateX(80px) rotate(-${i * 20}deg)`,
-                  transformOrigin: '0 0',
-                  opacity: i % 3 === 0 ? 1 : 0.6
-                }}
-              >
-                {i % 1 === 0 ? 'yawofniiaJ'.split('')[i/1] : '•'}
-              </span>
-            ))}
-          </div>
+    <div className="w-full min-h-screen flex items-center justify-center bg-white transition-colors duration-300">
+      <div className="text-center space-y-6">
+        {/* Animated loader with your gradient */}
+        <div className="relative mx-auto w-32 h-32 flex items-center justify-center">
+          <div 
+            className="absolute w-full h-full rounded-full animate-spin-slow"
+            style={{ 
+              opacity: 0.2 
+            }}
+          ></div>
+          <img
+            src="/img/loader.gif"
+            alt="Loading"
+            className="relative z-10 w-24 h-24 object-contain"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/img/fallback-loader.svg";
+            }}
+          />
         </div>
   
-        {/* Pulsing center dots */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-          {[0, 1, 2, 3].map((index) => (
-            <div
-              key={index}
-              className="absolute w-3 h-3 bg-blue-500 rounded-full animate-wave"
-              style={{
-                animationDelay: `${index * 0.2}s`,
-                left: `${Math.cos(index * Math.PI/2) * 10}px`,
-                top: `${Math.sin(index * Math.PI/2) * 10}px`
-              }}
-            ></div>
-          ))}
+        {/* Text with your gradient colors */}
+        <div className="space-y-2">
+          <h2 
+            className="text-lg md:text-2xl font-bold tracking-tight"
+            style={{ 
+              background: "linear-gradient(to right, #0061d1d1, #315476c7)",
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              color: 'transparent'
+            }}
+          >
+            Welcome To Jai Infoway
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400 font-medium">
+            Loading your experience...
+          </p>
         </div>
-        
-        {/* jAI logo - now properly above all other elements */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 text-white rounded-full flex items-center justify-center font-bold z-30" style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}>
-          jAI
+  
+        {/* Progress bar with your gradient */}
+        <div className="w-56 mx-auto h-1.5 rounded-full overflow-hidden">
+          <div 
+            className="h-full animate-progress"
+            style={{ 
+              background: "linear-gradient(to right, #0061d1d1, #315476c7)",
+              animation: 'progress 2.5s ease-in-out infinite'
+            }}
+          ></div>
         </div>
       </div>
     </div>

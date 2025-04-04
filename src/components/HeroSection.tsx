@@ -37,6 +37,7 @@ export default function HeroSection({
   meetingLink, // Use the prop from page.tsx
 }: HeroSectionProps) {
   const [isFreeTrialOpen, setIsFreeTrialOpen] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false); // NEW STATE
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   if (!heroData) return null;
@@ -191,13 +192,14 @@ export default function HeroSection({
           style={{ background: "linear-gradient(to right, #0061d1d1, #315476c7)" }}
         >
           <button
-            onClick={() => setIsChatOpen(true, "talk_to_hype")}
+            onClick={() => setIsChatModalOpen(true)} 
+
             className="cursor-pointer relative z-10 bg-white text-blue-600 rounded-full font-medium shadow-md hover:bg-gray-50 transition-all flex items-center gap-2
             px-3 py-1 text-xs
             sm:px-4 sm:py-1.5 sm:text-sm
             md:px-5 md:py-2 md:text-base"
           >
-            <span>Talk To Hype</span>
+            <span>Talk To jAI</span>
             <span className="text-lg">🎙</span>
           </button>
 
@@ -212,6 +214,59 @@ export default function HeroSection({
           </div>
         </div>
       </div>
+
+      {/* NEW CHAT MODAL */}
+      {isChatModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{zIndex: 99999}}>
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setIsChatModalOpen(false)}
+          />
+
+          <div className="relative w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden">
+            <button
+              onClick={() => setIsChatModalOpen(false)}
+              className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <Image
+                  src={Avatar}
+                  alt="AI Avatar"
+                  width={48}
+                  height={48}
+                  className="rounded-full"
+                />
+                <h2 className="text-xl font-bold text-gray-800">Chat with jAI</h2>
+              </div>
+
+              <div className="h-64 mb-4 p-4 bg-gray-50 rounded-lg overflow-y-auto">
+                {/* Chat messages will appear here */}
+                <div className="text-center text-gray-500 py-8">
+                  <p>How can I help you today?</p>
+                </div>
+              </div>
+
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Type your message..."
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                  Send
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Bottom Benefits Grid - For screens below md */}
       <div className="container mx-auto px-4 py-8 md:hidden">
@@ -323,17 +378,15 @@ export default function HeroSection({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-md ${
-                    isSubmitting ? "opacity-75 cursor-not-allowed" : ""
-                  }`}
+                  className={`w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-md ${isSubmitting ? "opacity-75 cursor-not-allowed" : ""
+                    }`}
                 >
                   {isSubmitting ? "Submitting..." : "Start Free Trial"}
                 </button>
 
                 {submitMessage && (
-                  <p className={`text-sm text-center mt-4 ${
-                    submitMessage.includes("success") ? "text-green-600" : "text-red-600"
-                  }`}>
+                  <p className={`text-sm text-center mt-4 ${submitMessage.includes("success") ? "text-green-600" : "text-red-600"
+                    }`}>
                     {submitMessage}
                   </p>
                 )}
