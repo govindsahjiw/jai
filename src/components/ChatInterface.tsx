@@ -974,6 +974,42 @@ const handleContactSubmit = async (e: React.FormEvent) => {
     }
   }, [isOpen, messageIndex, isTyping, conversationType, showContactForm, email, phone]);
 
+  const fetchOpenAIResponse = async (userMessage: string) => {
+    setIsTyping(true); // Show typing indicator while waiting for OpenAI response
+    try {
+      const response = await fetch('http://localhost:3001/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: [
+            { role: "user", content: userMessage },
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch response from backend');
+      }
+
+      const data = await response.json();
+      const aiMessage: ChatMessage = {
+        text: data.content, // Extract the content from OpenAI response
+        type: "answer",
+      };
+      setMessages((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('Error fetching OpenAI response:', error);
+      setMessages((prev) => [
+        ...prev,
+        { text: "Sorry, something went wrong. Please try again.", type: "answer" },
+      ]);
+    } finally {
+      setIsTyping(false); // Hide typing indicator after response
+    }
+  };
+
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
   };
@@ -986,12 +1022,26 @@ const handleContactSubmit = async (e: React.FormEvent) => {
     }
   };
 
+  // const handleSendMessage = () => {
+  //   if (inputMessage.trim()) {
+  //     const newMessage: ChatMessage = { text: inputMessage, type: "question" };
+  //     setMessages(prev => [...prev, newMessage]);
+  //     setInputMessage("");
+  //     setShowContactForm(true);
+  //   }
+  // };
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
       const newMessage: ChatMessage = { text: inputMessage, type: "question" };
-      setMessages(prev => [...prev, newMessage]);
+      setMessages((prev) => [...prev, newMessage]);
       setInputMessage("");
-      setShowContactForm(true);
+
+      // NEW: Check if static messages are done, then use OpenAI
+      if (messageIndex >= conversationMap[conversationType].length) {
+        fetchOpenAIResponse(inputMessage); // Call OpenAI API via backend
+      } else {
+        setShowContactForm(true); // Show contact form if static messages aren't done
+      }
     }
   };
 
